@@ -9,25 +9,16 @@
 import UIKit
 
 class HalfModalTransitioningDelegate: NSObject, UIViewControllerTransitioningDelegate {
-    var viewController: UIViewController
-    var presentingViewController: UIViewController
-    var interactionController: HalfModalInteractiveTransition
+    var interactionController: HalfModalInteractiveTransition?
     
     var interactiveDismiss = true
-    
-    init(viewController: UIViewController, presentingViewController: UIViewController) {
-        self.viewController = viewController
-        self.presentingViewController = presentingViewController
-        self.interactionController = HalfModalInteractiveTransition(viewController: self.viewController, withView: self.presentingViewController.view, presentingViewController: self.presentingViewController)
-        
-        super.init()
-    }
     
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         return HalfModalTransitionAnimator(type: .Dismiss)
     }
     
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+        interactionController = HalfModalInteractiveTransition(presented: presented)
         return HalfModalPresentationController(presentedViewController: presented, presenting: presenting)
     }
     

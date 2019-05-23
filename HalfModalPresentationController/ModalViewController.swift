@@ -20,4 +20,8 @@ class ModalViewController: UIViewController, HalfModalPresentable {
         
         dismiss(animated: true, completion: nil)
     }
+    
+    deinit {
+        print("DEINIT MODAL")
+    }
 }

@@ -9,21 +9,19 @@
 import UIKit
 
 class HalfModalInteractiveTransition: UIPercentDrivenInteractiveTransition {
-    var viewController: UIViewController
-    var presentingViewController: UIViewController?
+    weak var presentedViewController: UIViewController?
     var panGestureRecognizer: UIPanGestureRecognizer
     
     var shouldComplete: Bool = false
     
-    init(viewController: UIViewController, withView view:UIView, presentingViewController: UIViewController?) {
-        self.viewController = viewController
-        self.presentingViewController = presentingViewController
+    init(presented: UIViewController?) {
+        self.presentedViewController = presented
         self.panGestureRecognizer = UIPanGestureRecognizer()
         
         super.init()
         
         self.panGestureRecognizer.addTarget(self, action: #selector(onPan))
-        view.addGestureRecognizer(panGestureRecognizer)
+        presented?.view.addGestureRecognizer(panGestureRecognizer)
     }
     
     override func startInteractiveTransition(_ transitionContext: UIViewControllerContextTransitioning) {
@@ -44,7 +42,7 @@ class HalfModalInteractiveTransition: UIPercentDrivenInteractiveTransition {
         
         switch pan.state {
         case .began:
-            self.presentingViewController?.dismiss(animated: true, completion: nil)
+            self.presentedViewController?.dismiss(animated: true, completion: nil)
             
             break
             

@@ -25,7 +25,7 @@ class ViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
         
-        self.halfModalTransitioningDelegate = HalfModalTransitioningDelegate(viewController: self, presentingViewController: segue.destination)
+        self.halfModalTransitioningDelegate = HalfModalTransitioningDelegate()
         
         segue.destination.modalPresentationStyle = .custom
         segue.destination.transitioningDelegate = self.halfModalTransitioningDelegate
