@@ -23,8 +23,8 @@ class HalfModalTransitioningDelegate: NSObject, UIViewControllerTransitioningDel
     }
     
     func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-        if interactiveDismiss {
-            return self.interactionController
+        if interactiveDismiss, let interactionController = interactionController, interactionController.isInteractive {
+            return interactionController
         }
         
         return nil

@@ -12,6 +12,9 @@ class HalfModalInteractiveTransition: UIPercentDrivenInteractiveTransition {
     weak var presentedViewController: UIViewController?
     var panGestureRecognizer: UIPanGestureRecognizer
     
+    private(set) var isInteractive = false
+    private var hasStarted = false
+    
     var shouldComplete: Bool = false
     
     init(presented: UIViewController?) {
@@ -42,10 +45,13 @@ class HalfModalInteractiveTransition: UIPercentDrivenInteractiveTransition {
         
         switch pan.state {
         case .began:
-            self.presentedViewController?.dismiss(animated: true, completion: nil)
-            
-            break
-            
+            if !hasStarted {
+                hasStarted = true
+                isInteractive = true
+                self.presentedViewController?.dismiss(animated: true, completion: nil)
+            } else {
+                pause()
+            }
         case .changed:
             let screenHeight = UIScreen.main.bounds.size.height - 50
             let dragAmount = screenHeight
@@ -58,9 +64,6 @@ class HalfModalInteractiveTransition: UIPercentDrivenInteractiveTransition {
             update(CGFloat(percent))
             
             shouldComplete = percent > threshold
-            
-            break
-            
         case .ended, .cancelled:
             if pan.state == .cancelled || !shouldComplete {
                 cancel()
@@ -72,13 +75,12 @@ class HalfModalInteractiveTransition: UIPercentDrivenInteractiveTransition {
                 
                 print("finished transition")
             }
-            
-            break
-            
+            isInteractive = false
+            hasStarted = false
         default:
             cancel()
-            
-            break
+            isInteractive = false
+            hasStarted = false
         }
     }
 }
